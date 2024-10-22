@@ -1,25 +1,29 @@
 
-insert 111
-             insert 23
+insert Barbie
+             insert Oppenheimer
 
 insert 99
-insert         4
+insert         Strays
 
 isEmpty
 
-    insert     111
+    insert     MafiaMamma
 
 print
 
 
-search 9
+search Barbie
 
-remove 23
+remove Strays
 
-remove 4
-remove 999999
+remove Blackberry
+remove TheLittleMermaid
 isEmptyasfh
 print
 
-insert 123
+insert Elemental
+print
+
+insert PussinBoots:TheLastWish
+
 print

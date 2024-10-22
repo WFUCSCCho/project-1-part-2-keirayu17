@@ -1,0 +1,32 @@
+insert Barbie
+insert Oppenheimer
+insert Strays
+Invalid Command
+insert MafiaMamma
+Barbie | Gross: $594254460 | Release: 7/21/23 | Distributor: WarnerBros.
+ Oppenheimer | Gross: $300144670 | Release: 7/21/23 | Distributor: UniversalPictures
+ Strays | Gross: $16840900 | Release: 8/18/23 | Distributor: UniversalPictures
+ MafiaMamma | Gross: $3496761 | Release: 4/14/23 | Distributor: BleeckerStreetMedia
+ 
+found Barbie
+removed Strays
+remove failed
+remove failed
+Invalid Command
+Barbie | Gross: $594254460 | Release: 7/21/23 | Distributor: WarnerBros.
+ Oppenheimer | Gross: $300144670 | Release: 7/21/23 | Distributor: UniversalPictures
+ MafiaMamma | Gross: $3496761 | Release: 4/14/23 | Distributor: BleeckerStreetMedia
+ 
+insert Elemental
+Barbie | Gross: $594254460 | Release: 7/21/23 | Distributor: WarnerBros.
+ Oppenheimer | Gross: $300144670 | Release: 7/21/23 | Distributor: UniversalPictures
+ Elemental | Gross: $151692473 | Release: 6/16/23 | Distributor: WaltDisneyStudiosMotionPictures
+ MafiaMamma | Gross: $3496761 | Release: 4/14/23 | Distributor: BleeckerStreetMedia
+ 
+insert PussinBoots:TheLastWish
+Barbie | Gross: $594254460 | Release: 7/21/23 | Distributor: WarnerBros.
+ Oppenheimer | Gross: $300144670 | Release: 7/21/23 | Distributor: UniversalPictures
+ PussinBoots:TheLastWish | Gross: $185535345 | Release: 12/21/23 | Distributor: UniversalPictures
+ Elemental | Gross: $151692473 | Release: 6/16/23 | Distributor: WaltDisneyStudiosMotionPictures
+ MafiaMamma | Gross: $3496761 | Release: 4/14/23 | Distributor: BleeckerStreetMedia
+ 
