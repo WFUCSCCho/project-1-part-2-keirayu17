@@ -6,27 +6,65 @@
  * @date: September 26, 2024
  */
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Parser {
 
     // Create a BST tree of your class type
     private BST<Movie> mybst = new BST<>();
+    private List<Movie> movieList = new ArrayList<>();
 
     public Parser(String filename) throws FileNotFoundException {
-        process(new File(filename));
+        processCSV(new File("Top_200_Movies_Dataset_2023_Cleaned.csv"));
+        processInput(new File(filename));
     }
 
-    // Implement the process method
-    public void process(File input) throws IOException {
-        Scanner scanner = new Scanner(input);
-
+    // Process the csv file and stores all data entries into a list
+    public void processCSV(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-            if (!line.isEmpty()) { // Skip empty line
-                String[] command = line.split("\\s+", 2);  // Split into command and the rest of the line
-                operate_BST(command);
+            if (!line.isEmpty()) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    try{
+                        String title = parts[0].trim();
+                        int totalGross = Integer.parseInt(parts[1].trim());
+                        String releaseDate = parts[2].trim();
+                        String distributor = parts[3].trim();
+
+                        Movie movie = new Movie(title, totalGross, releaseDate, distributor);
+                        movieList.add(movie);
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+        scanner.close();
+    }
+
+    // Process input file
+    public void processInput(File input) throws FileNotFoundException {
+        Scanner scanner = new Scanner(input);
+        while (scanner.hasNextLine()) {
+            // Remove redundant spaces for each input command
+            String line = scanner.nextLine().trim();
+
+            if (!line.isEmpty()){
+                String[] command = line.split("\\s+");
+                //call operate_BST method;
+                try {
+                    //writeToFile("process","./result.txt");
+                    operate_BST(command);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
         }
         scanner.close();
@@ -38,35 +76,47 @@ public class Parser {
         switch (command[0]) {
             case "insert":
                 if (command.length == 2) {
-                    Movie movieToInsert = parseMovie(command[1]);  // Parse the movie details
-                    mybst.insert(movieToInsert);
-                    writeToFile("insert " + movieToInsert.toString(), "./result.txt");
+                    String title = command[1].trim();
+                    Movie foundMovie = findMovieInCSV(title);
+                    if (foundMovie != null) {
+                        mybst.insert(foundMovie);
+                        writeToFile("insert " + title, "./result.txt");
+                    }
+                }
+                else {
+                    writeToFile("Invalid Command", "./result.txt");
                 }
                 break;
 
             case "remove":
                 if (command.length == 2) {
-                    Movie movieToRemove = parseMovie(command[1]);  // Parse the movie details
-                    Movie removedMovie = mybst.remove(movieToRemove);  // Remove by movie object
-
-                    if (removedMovie != null) {
-                        writeToFile("removed " + removedMovie.toString(), "./result.txt");
-                    } else {
+                    String title = command[1].trim();
+                    Movie foundMovie = searchMovieByTitle(title); // Search in the BST
+                    if (foundMovie != null) {
+                        mybst.remove(foundMovie);
+                        writeToFile("removed " + title, "./result.txt");
+                    }
+                    else {
                         writeToFile("remove failed", "./result.txt");
                     }
+                }
+                else {
+                    writeToFile("Invalid Command", "./result.txt");
                 }
                 break;
 
             case "search":
                 if (command.length == 2) {
-                    Movie movieToSearch = parseMovie(command[1]);  // Parse the movie details
-                    Movie foundMovie = mybst.search(movieToSearch);  // Search by movie object
-
+                    String title = command[1].trim();
+                    Movie foundMovie = searchMovieByTitle(title); // Search in the BST
                     if (foundMovie != null) {
-                        writeToFile("found " + foundMovie.toString(), "./result.txt");
+                        writeToFile("found " + title, "./result.txt");
                     } else {
                         writeToFile("search failed", "./result.txt");
                     }
+                }
+                else {
+                    writeToFile("Invalid Command", "./result.txt");
                 }
                 break;
 
@@ -84,6 +134,27 @@ public class Parser {
         }
     }
 
+    public Movie findMovieInCSV(String title) {
+        for (Movie movie : movieList) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return movie;
+            }
+        }
+        return null;
+    }
+
+    public Movie searchMovieByTitle(String title) {
+        Iterator<Movie> iterator = mybst.iterator();
+        while (iterator.hasNext()) {
+            Movie movie = iterator.next();
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return movie;
+            }
+        }
+        return null;
+    }
+
+
     // Implement the writeToFile method
     // Generate the result file
     public void writeToFile(String content, String filePath) throws IOException {
@@ -93,20 +164,4 @@ public class Parser {
         fileWriter.close();
     }
 
-    // Organize data entry
-    public Movie parseMovie(String line) {
-        // Split the CSV line by commas, considering fields with quotes
-        String[] content = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-        // Remove quotes from the relevant fields
-        String title = content[1].replace("\"", "");
-        int rank = Integer.parseInt(content[0]);
-        int theaters = Integer.parseInt(content[2].replace("\"", "").replace(",", ""));
-        int totalGross = Integer.parseInt(content[3].replace("\"", "").replace(",", ""));
-        String releaseDate = content[4];
-        String distributor = content[5].replace("\"", "");
-
-        // Create and return a new Movie object
-        return new Movie(rank, title, theaters, totalGross, releaseDate, distributor);
-    }
 }
